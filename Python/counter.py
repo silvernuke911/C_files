@@ -1,8 +1,3 @@
-import time
-N = int(1e5)
-s = time.time()
-print(N)
+N = int(1e4)
 for i in range(N):
     print(i)
-e = time.time()
-print(f'Execution time: {e-s}')
