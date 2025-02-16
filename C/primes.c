@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
-#include <time.h>  // For measuring execution time
+#include <time.h> // For measuring execution time
 
 void sieve_of_eratosthenes(int N) {
     if (N < 2) {
