@@ -257,7 +257,100 @@ int nester(){
 // Difference of continue and break
     // contiue - skips the rest of the code and returns back to the start
     // break   - exits the loop
- 
+// Arrays
+
+int arrays_lol() {
+    int prices[6] = {0, 1, 2, 3, 4, 5};
+    
+    printf("Size of prices array in bytes: %zu\n", sizeof(prices));
+
+    int length = sizeof(prices) / sizeof(prices[0]);
+    printf("Array elements: ");
+    for (int i = 0; i < length; i++) { 
+        printf("%d ", prices[i]);  
+    }
+    
+    printf("\n");
+    return 0;
+}
+// 2d arrays
+int array_2d(){
+    // presetting
+    int numbers[3][3] = {{1,2,3},
+                         {4,5,6},
+                         {7,8,9}};
+    // dynamic setting
+    int numbers1[3][3];
+    numbers1[0][0] = 1;
+
+    int rows = sizeof(numbers) / sizeof(numbers[0]);
+    int cols = sizeof(numbers[0]) / sizeof(numbers[0][0]);
+
+    for (int i = 0; i < rows; i++){
+        for (int j = 0; j < cols; j++){
+            printf("%i ", numbers[i][j]);
+        }
+        printf("\n");
+    }
+    return 0;
+}
+int cols2(){
+    int rows = 15;
+    int cols = 10;
+    int size = rows * cols; 
+
+    int arrays[rows][cols];
+
+    int k = 1;
+    for (int i = 0; i < rows; i++){
+        for (int j = 0; j < cols; j++){
+            arrays[i][j] = k++;
+        }
+    }
+    
+
+    for (int i = 0; i < rows; i++){
+        for (int j = 0; j < cols; j++){
+            printf("%3i ", arrays[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void bubbleSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {  
+        for (int j = 0; j < n - i - 1; j++) {  
+            if (arr[j] > arr[j + 1]) {  
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+void printArray(int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+void array_sorter_boiler(){
+    int arr[] = {5, 3, 8, 4, 2,23,54,34,23,5,67,34,6,72,23,67,3};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    printf("Original array: ");
+    printArray(arr, n);
+
+    bubbleSort(arr, n);
+
+    printf("Sorted array: ");
+    printArray(arr, n);
+}
+// typedef - nickname for reserved keywords that gives an existing data type 
+
+//STRUCTS NEXT
+//ARRAY STRUCT
+//ENUMS
 int main(){
     // math_funcs();
     // double circ = circ_circumference();
@@ -289,6 +382,10 @@ int main(){
     // forlooper2();
     // whilelooper();
     //dowhiler();
-    nester();
+    //nester();
+    // arrays_lol();
+    // array_2d();
+    // cols2();
+    array_sorter_boiler();
     return 0; 
 }
