@@ -56,11 +56,12 @@ int legal_age(){
 }
 
 // logical operators
-int log_op(){
+void log_op(){
     // && is the logical and operator
     // || is the or logical operator
     // ! is the not logical operator
 }
+
 float hypotenuse(){
     double x;
     double y;
