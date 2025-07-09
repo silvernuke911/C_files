@@ -330,11 +330,14 @@ void bubbleSort(int arr[], int n) {
     }
 }
 void printArray(int arr[], int n) {
+    printf("[ ");
     for (int i = 0; i < n; i++) {
         printf("%d ", arr[i]);
     }
+    printf("]");
     printf("\n");
 }
+
 void array_sorter_boiler(){
     int arr[] = {5, 3, 8, 4, 2,23,54,34,23,5,67,34,6,72,23,67,3};
     int n = sizeof(arr) / sizeof(arr[0]);
@@ -344,7 +347,7 @@ void array_sorter_boiler(){
 
     bubbleSort(arr, n);
 
-    printf("Sorted array: ");
+    printf("Sorted array  : ");
     printArray(arr, n);
 }
 // typedef - nickname for reserved keywords that gives an existing data type 
