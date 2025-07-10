@@ -359,153 +359,154 @@ class Simulation:
     def handle_keyboard_events(self, event):
         mouse_pos = pygame.Vector2(pygame.mouse.get_pos())
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_BACKSPACE:
-                self.system_reset()
-                self.running = False
-                self.is_menu = True
+            match event.key:
+                case pygame.K_BACKSPACE:
+                    self.system_reset()
+                    self.running = False
+                    self.is_menu = True
 
-            elif event.key == pygame.K_F2:  # Toggle help
-                self.show_help = not self.show_help
+                case pygame.K_F2:
+                    self.show_help = not self.show_help
 
-            if event.key == pygame.K_a:
-                if self.selected_index != -1:
+                case pygame.K_a:
+                    if self.selected_index != -1:
+                        self.selected_index = -1
+                    else:
+                        self.selected_index = -1
+                        for i, particle in enumerate(reversed(self.particles)):
+                            if (particle.pos - mouse_pos).length() <= particle.radius:
+                                self.selected_index = len(self.particles) - 1 - i
+                                break
+
+                case pygame.K_x:
+                    self.time = 0
+                    self.particles = []
                     self.selected_index = -1
-                else:
-                    self.selected_index = -1  # Reset selection first
-                    for i, particle in enumerate(reversed(self.particles)):  # Check front-to-back
-                        if (particle.pos - mouse_pos).length() <= particle.radius:
-                            self.selected_index = len(self.particles) - 1 - i  # Convert reverse index
-                            break
- 
-            if event.key == pygame.K_x:  # Clear all particles
-                self.time = 0
-                self.particles = []
-                self.selected_index = -1
-                self.time_scale = 1
-                self.most_max_speed = 1.0
-                self.particle_count = []
-                self.energy_history = []               
-                self.temperature_history = []
+                    self.time_scale = 1
+                    self.most_max_speed = 1.0
+                    self.particle_count = []
+                    self.energy_history = []
+                    self.temperature_history = []
 
-            elif event.key == pygame.K_DELETE:
-                self.running = False
-                self.gravity = False 
-                self.damping = False 
-                self.collision_damping = False
-                pygame.quit()
-                sys.exit()
+                case pygame.K_DELETE:
+                    self.running = False
+                    self.gravity = False
+                    self.damping = False
+                    self.collision_damping = False
+                    pygame.quit()
+                    sys.exit()
 
-            if event.key == pygame.K_v:
-                self.most_max_speed = 1
+                case pygame.K_v:
+                    self.most_max_speed = 1
 
-            elif event.key == pygame.K_r:  # Random particles
-                self.add_random_particles(100)
-            
-            elif event.key == pygame.K_c:  # Cluster around mouse
-                self.add_cluster_around_mouse(100)
-            
-            elif event.key == pygame.K_g:  # Toggle gravity
-                self.gravity = not self.gravity
-                self.evaporation = False
-            
-            elif event.key == pygame.K_d:  # Toggle damping
-                self.damping = not self.damping
-            
-            elif event.key == pygame.K_LEFT and self.particles:  # Select previous particle
-                self.selected_index = (self.selected_index - 1) % len(self.particles)
-            
-            elif event.key == pygame.K_RIGHT and self.particles:  # Select next particle
-                self.selected_index = (self.selected_index + 1) % len(self.particles)
-            
-            elif event.key == pygame.K_DOWN:  # Deselect particle
-                self.selected_index = -1
-            
-            elif event.key == pygame.K_COMMA:  # Decrease time scale
-                self.time_scale /= self.time_step
-            
-            elif event.key == pygame.K_PERIOD:  # Increase time scale
-                self.time_scale *= self.time_step
-            
-            elif event.key == pygame.K_SLASH:  #  Return time scale to 1
-                self.time_scale = 1
+                case pygame.K_r:
+                    self.add_random_particles(100)
 
-            elif event.key == pygame.K_f:  # Create particle with F key
-                self.f_pressed = True
-                mx, my = pygame.mouse.get_pos()
-                p = Particle(mx, my, radius=self.particle_radius)
-                p.dragging = True
-                self.current_particle = p
-                self.dragging = True
-                self.dragging_with_key = True
-                self.particles.append(p)
+                case pygame.K_c:
+                    self.add_cluster_around_mouse(100)
 
-            if event.key == pygame.K_SPACE:  # Toggle pause
-                self.paused = not self.paused
+                case pygame.K_g:
+                    self.gravity = not self.gravity
+                    self.evaporation = False
 
-            if event.key == pygame.K_e:  # Remove particles near mouse
-                self.remove_particles_near_mouse()
-            
-            if event.key == pygame.K_b:  # Force particles to move
-                self.bomb_force()
+                case pygame.K_d:
+                    self.damping = not self.damping
 
-            if event.key == pygame.K_z:  # Increase the kinetic energy of all particles
-                for p in self.particles:
-                    if p.vel == pygame.math.Vector2(0,0):
-                        p.vel = pygame.math.Vector2(random.uniform(-1,1), random.uniform(-1,1))
-                    else: p.vel *= math.sqrt(1.2)
+                case pygame.K_LEFT if self.particles:
+                    self.selected_index = (self.selected_index - 1) % len(self.particles)
 
-            elif event.key == pygame.K_1 or event.key == pygame.K_KP_1:  ## velocity graph bin gap
-                self.bin_gap_overide = False
-                self.most_max_speed = 1
-                
-            elif event.key == pygame.K_2 or event.key == pygame.K_KP_2: 
-                self.bin_gap_overide = True 
-                self.most_max_speed = 1
-                self.bin_gap = 0.5
-            elif event.key == pygame.K_3 or event.key == pygame.K_KP_3:  
-                self.bin_gap_overide = True 
-                self.most_max_speed = 1
-                self.bin_gap = 2.5
-            elif event.key == pygame.K_4 or event.key == pygame.K_KP_4:  
-                self.bin_gap_overide = True 
-                self.most_max_speed = 1
-                self.bin_gap = 5
+                case pygame.K_RIGHT if self.particles:
+                    self.selected_index = (self.selected_index + 1) % len(self.particles)
 
-            elif event.key == pygame.K_0 or event.key == pygame.K_KP_0:
-                for p in self.particles:
-                    p.vel = pygame.math.Vector2(0,0)
+                case pygame.K_DOWN:
+                    self.selected_index = -1
 
-            elif event.key == pygame.K_6:  # Toggle cell density visualization
-                self.show_cell_density = not self.show_cell_density
-                if self.show_cell_density:
-                    self.calculate_cell_density()
+                case pygame.K_COMMA:
+                    self.time_scale /= self.time_step
 
-            elif event.key == pygame.K_7 or event.key == pygame.K_KP_7:  # Toggle collision damping
-                for p in self.particles:
-                    p.trajectory = []
+                case pygame.K_PERIOD:
+                    self.time_scale *= self.time_step
 
-            elif event.key == pygame.K_8 or event.key == pygame.K_KP_8:  # Toggle collision damping
-                self.collision_damping = not self.collision_damping
+                case pygame.K_SLASH:
+                    self.time_scale = 1
 
-            elif event.key == pygame.K_9 or event.key == pygame.K_KP_9: # toggle evaporation
-                if self.gravity:
-                    self.evaporation = not self.evaporation
-            
-            if event.key == pygame.K_F1:
-                self.show_ui = not self.show_ui
+                case pygame.K_f:
+                    self.f_pressed = True
+                    mx, my = pygame.mouse.get_pos()
+                    p = Particle(mx, my, radius=self.particle_radius)
+                    p.dragging = True
+                    self.current_particle = p
+                    self.dragging = True
+                    self.dragging_with_key = True
+                    self.particles.append(p)
 
-            elif event.key == pygame.K_F11:  # F11 to toggle
-                self.toggle_fullscreen()
+                case pygame.K_SPACE:
+                    self.paused = not self.paused
 
-            elif event.key == pygame.K_EQUALS or event.key == pygame.K_KP_PLUS:  ## particle size
-                temp_size = min(40,self.particle_radius*2 )
-                self.particle_radius = temp_size
-            elif event.key == pygame.K_MINUS or event.key == pygame.K_KP_MINUS:  
-                temp_size = max(2.5,self.particle_radius/2 )
-                self.particle_radius = temp_size
+                case pygame.K_e:
+                    self.remove_particles_near_mouse()
 
-            
-        
+                case pygame.K_b:
+                    self.bomb_force()
+
+                case pygame.K_z:
+                    for p in self.particles:
+                        if p.vel == pygame.math.Vector2(0, 0):
+                            p.vel = pygame.math.Vector2(random.uniform(-1, 1), random.uniform(-1, 1))
+                        else:
+                            p.vel *= math.sqrt(1.2)
+
+                case pygame.K_1 | pygame.K_KP_1:
+                    self.bin_gap_overide = False
+                    self.most_max_speed = 1
+
+                case pygame.K_2 | pygame.K_KP_2:
+                    self.bin_gap_overide = True
+                    self.most_max_speed = 1
+                    self.bin_gap = 0.5
+
+                case pygame.K_3 | pygame.K_KP_3:
+                    self.bin_gap_overide = True
+                    self.most_max_speed = 1
+                    self.bin_gap = 2.5
+
+                case pygame.K_4 | pygame.K_KP_4:
+                    self.bin_gap_overide = True
+                    self.most_max_speed = 1
+                    self.bin_gap = 5
+
+                case pygame.K_0 | pygame.K_KP_0:
+                    for p in self.particles:
+                        p.vel = pygame.math.Vector2(0, 0)
+
+                case pygame.K_6 | pygame.K_KP_6:
+                    self.show_cell_density = not self.show_cell_density
+                    if self.show_cell_density:
+                        self.calculate_cell_density()
+
+                case pygame.K_7 | pygame.K_KP_7:
+                    for p in self.particles:
+                        p.trajectory = []
+
+                case pygame.K_8 | pygame.K_KP_8:
+                    self.collision_damping = not self.collision_damping
+
+                case pygame.K_9 | pygame.K_KP_9:
+                    if self.gravity:
+                        self.evaporation = not self.evaporation
+
+                case pygame.K_F1:
+                    self.show_ui = not self.show_ui
+
+                case pygame.K_F11:
+                    self.toggle_fullscreen()
+
+                case pygame.K_EQUALS | pygame.K_KP_PLUS:
+                    self.particle_radius = min(40, self.particle_radius * 2)
+
+                case pygame.K_MINUS | pygame.K_KP_MINUS:
+                    self.particle_radius = max(2.5, self.particle_radius / 2)
+
         if event.type == pygame.KEYUP and event.key == pygame.K_f and self.current_particle and self.dragging_with_key:
             mx, my = pygame.mouse.get_pos()
             drag_vector = self.current_particle.pos - pygame.Vector2(mx, my)
@@ -738,12 +739,12 @@ class Simulation:
             p = self.particles[self.selected_index]
             skip = 1
             pygame.draw.circle(
-                    self.screen, 
-                    (255, 255, 255),  # White border color
-                    (int(p.pos.x), int(p.pos.y)), 
-                    p.radius + 3,  # Slightly larger than particle
-                    min(3,p.radius * 0.3)  # Border thickness
-                )
+                self.screen, 
+                (255, 255, 255),  
+                (int(p.pos.x), int(p.pos.y)), 
+                int(p.radius + 3), 
+                int(min(3, p.radius * 0.3)) 
+            )
             if len(p.trajectory) > 4:
                 pygame.draw.lines(self.screen, (255, 255, 255), False, p.trajectory[::skip], 2)
             p.draw(self.screen)
@@ -1149,3 +1150,8 @@ class Particle:
 if __name__ == "__main__":
     sim = Simulation(1000, 600)
     sim.run()
+
+## TODO 
+    ## SCREEN RECORD?
+    ## DATA RECORD?
+    ## DELTA TIME APPLICATION?
