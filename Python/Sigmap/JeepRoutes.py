@@ -499,13 +499,7 @@ def create_philcoa_route() -> nx.MultiDiGraph:
         (34,14.65473,121.0584,'node34'),
         (35,14.65476,121.06026,'node35'),
         (36,14.65479,121.06232,'node36'),
-        (37,14.65482,121.06407,'node37'),
-        (38,14.65482,121.06416,'node38'),
-        (39,14.65482,121.06418,'node39'),
-        (40,14.65481,121.06422,'node40'),
-        (41,14.6548,121.06427,'node41'),
-        (42,14.65382,121.06478,'node42'),
-        (43,14.65366,121.06487,'node43'),
+        (38,14.652965,121.062328,"node38"),
         (44,14.65305,121.06515,'node44'),
         (45,14.65298,121.06524,'node45'),
         (46,14.65274,121.06567,'node46'),
@@ -769,14 +763,8 @@ def create_philcoa_route() -> nx.MultiDiGraph:
         (33, 34, {'length': 35.56518574834436, 'name': 'philcoa ROUTE'}),
         (34, 35, {'length': 200.38876319544838, 'name': 'philcoa ROUTE'}),
         (35, 36, {'length': 221.93028652606606, 'name': 'philcoa ROUTE'}),
-        (36, 37, {'length': 188.54111744952127, 'name': 'philcoa ROUTE'}),
-        (37, 38, {'length': 9.694896831982113, 'name': 'philcoa ROUTE'}),
-        (38, 39, {'length': 2.154421517367811, 'name': 'philcoa ROUTE'}),
-        (39, 40, {'length': 4.448636784791455, 'name': 'philcoa ROUTE'}),
-        (40, 41, {'length': 5.498528848686363, 'name': 'philcoa ROUTE'}),
-        (41, 42, {'length': 121.55562862373033, 'name': 'philcoa ROUTE'}),
-        (42, 43, {'length': 20.184086467724686, 'name': 'philcoa ROUTE'}),
-        (43, 44, {'length': 73.92664303873703, 'name': 'philcoa ROUTE'}),
+        (36, 38, {'length': 188.54111744952127, 'name': 'philcoa ROUTE'}),
+        (38, 44, {'length': 9.694896831982113, 'name': 'philcoa ROUTE'}),
         (44, 45, {'length': 12.408880228690123, 'name': 'philcoa ROUTE'}),
         (45, 46, {'length': 53.39240013899229, 'name': 'philcoa ROUTE'}),
         (46, 47, {'length': 20.481400218062813, 'name': 'philcoa ROUTE'}),
@@ -1108,6 +1096,8 @@ def create_overlap_route():
         (216,14.65579,121.06234,'node216'),
         (217,14.65552,121.06234,'node217'),
         (218,14.65496,121.06233,'node218'),
+        (219,14.654798,121.062328,'node219'),
+        (220,14.652965,121.062328,'node220')
     ]
     
     for node_id, lat, lon, name in nodes:
@@ -1211,6 +1201,8 @@ def create_overlap_route():
         (215, 216, {'length': 22.129078608513403, 'name': 'IKOT ROUTE'}),
         (216, 217, {'length': 29.874255520098426, 'name': 'IKOT ROUTE'}),
         (217, 218, {'length': 61.97077965999459, 'name': 'IKOT ROUTE'}),
+        (218, 219, {'length': 61.97077965999459, 'name': 'IKOT ROUTE'}),
+        (219, 220, {'length': 61.97077965999459, 'name': 'IKOT ROUTE'})
     ]
     
     for u, v, attr in edges:

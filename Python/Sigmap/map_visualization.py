@@ -11,10 +11,11 @@ from JeepRoutes import get_all_routes
 import labels
 
 # Configure global font settings
-plt.rcParams['font.family'] = "Consolas" # 'sans-serif'  # Base font family
+plt.rcParams['font.family'] = 'Arial' # 'sans-serif'  # Base font family
 plt.rcParams['font.sans-serif'] = ['Arial', 'DejaVu Sans', 'Helvetica']  # Fallback fonts
 plt.rcParams['font.style'] = 'normal'  # 'normal', 'italic', 'oblique'
 plt.rcParams['font.weight'] = 'normal'  # 'normal', 'bold', 'light'
+
 
 print("Importing Done!")
 
@@ -22,17 +23,21 @@ print("Loading Cache...")
 # Configuration
 CACHE_DIR = r"C:\Users\verci\Documents\code\c_files\Python\Sigmap\map_cache"
 img_dir = r"C:\Users\verci\Documents\code\c_files\Python\Sigmap\map_imgs"
-filename_base = "sigmap_v15"
+filename_base = "26"
 file_ext = ".png"
 label_streets  = False  # Set to False to disable street name labels.
 label_buildings = True  
 jeep_routes = True
 print("Loading Done!")
+def rgb_to_hex(r, g, b):
+    """Convert RGB values (0–255) to hex string."""
+    return "#{:02X}{:02X}{:02X}".format(r, g, b)
 
 # Example bounds
 lat_min, lat_max = 14.647, 14.6635
 lon_min, lon_max = 121.0525, 121.0762
 
+bg_color = "#FFEFCC"
 ROUTE_STYLES = {
     "ikot": {
         "edge_color": '#FFFF00',  # Yellow
@@ -64,9 +69,6 @@ ROUTE_STYLES = {
 print("Loading functions...")
 ox.settings.use_cache = True
 
-def rgb_to_hex(r, g, b):
-    """Convert RGB values (0–255) to hex string."""
-    return "#{:02X}{:02X}{:02X}".format(r, g, b)
 
 def handle_file_saving(directory, base_name, ext=".png"):
     """Handle the complete saving workflow after plotting."""
@@ -133,8 +135,8 @@ def plot_map(boundary, G, buildings):
     else:
         buildings.plot(
             ax=ax,
-            color='#6699cc',
-            edgecolor='#404040',
+            color="#E4A0A0",
+            edgecolor="#8B1F1A",
             linewidth=0.5,
             alpha=0.6,
             zorder=1
@@ -147,11 +149,11 @@ def plot_map(boundary, G, buildings):
     edges['highway'] = edges['highway'].astype(str)
 
     road_styles = {
-        'primary':      {'width': 5, 'color': rgb_to_hex(30,30,30)},
-        'secondary':    {'width': 4, 'color': rgb_to_hex(50,50,50)},
-        'tertiary':     {'width': 4, 'color': rgb_to_hex(80,80,80)},
-        'unclassified': {'width': 3, 'color': rgb_to_hex(80,80,80)},
-        'minor':        {'width': 2, 'color': rgb_to_hex(100,100,100)},
+        'primary':      {'width': 5, 'color': rgb_to_hex(40,40,40)},
+        'secondary':    {'width': 4, 'color': rgb_to_hex(60,60,60)},
+        'tertiary':     {'width': 4, 'color': rgb_to_hex(90,90,90)},
+        'unclassified': {'width': 3, 'color': rgb_to_hex(100,100,100)},
+        'minor':        {'width': 2, 'color': rgb_to_hex(120,120,120)},
     }
 
     for key, style in road_styles.items():
@@ -182,7 +184,7 @@ def plot_map(boundary, G, buildings):
                 linewidth=style.get("edge_width", 2),
                 edgecolor=style.get("edge_color", "#000000"),
                 linestyle=style.get("edge_style", "-"),
-                alpha=0.9,
+                alpha=1,
                 zorder=4
             )
             
@@ -223,8 +225,8 @@ def plot_map(boundary, G, buildings):
             )
     
     ## BACKGROUND COLOR
-    fig.patch.set_facecolor("#FFFFFF")         # Set figure background
-    ax.set_facecolor('#FFFFFF') 
+    fig.patch.set_facecolor(bg_color)         # Set figure background
+    ax.set_facecolor(bg_color) 
 
     plt.gca().set_aspect('equal', adjustable='box')
     plt.xlim(lon_min, lon_max)

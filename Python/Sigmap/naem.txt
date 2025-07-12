@@ -1,0 +1,113 @@
+Just get the names of the necessary buildings
+
+
+And the necessary streets, you can pull the coords later 
+
+
+BUILDINGS
+
+Commission on Human Rights 
+Bonifacio Hall
+UP National College of Public Administration
+ISSI
+Bonifacio Hall
+Solair
+UP College of Fine Arts
+Kamagong
+CHK
+Vanguard Bldg
+School of Urban and Regional Planning
+CMC
+School of Archaeology
+Gyud Food
+Village B
+Grand Stand
+Bahay ng Alumni
+College of Music
+Villamor Hall
+Quezon Hall
+The Oblation
+UPD Police Station and Fire Department
+College of Architecture
+Environmental and Energy Engineering
+ICE Structural Engineering Lab
+Chemical Engineering Building
+ICE
+School of Statistics
+CAL
+Vargas Museum
+Film Institute
+University Theatre
+IBG-KAL Theatre
+CHE
+
+Tennis Courts
+Molave
+Sanggumay
+Area 2
+PhilPost
+Shopping Center
+Yakal
+Ipil
+College of Engineering
+Melchor Hall
+Palma Hall
+Binetez Hall
+Miranda Hall
+NISMED
+MSI
+EEEI
+CS Library
+NIGS
+Mining and Mettalurgical 
+Kamia
+Sampaguita
+IB
+CS Admin
+CSRC
+National Science Complex
+IMath
+Malcolm
+UP Library
+NIP
+ICT
+ICR
+NIMBB
+PAGASA
+Home Econ
+UPIS
+UPIS - Elementary
+PGC
+Vinzons Hall
+SUB
+Virata Hall
+Econ
+Romulo Hall
+UP Asian Center Library
+GT Toyota
+International Center
+Ilang Ilang
+Dagohoy
+UH
+Parish of the Holy Sacrifice
+UHS
+Acacia
+Kalayaan
+Acad Oval
+UPD Sunken Garden
+Palma
+Educ
+Arbo
+Village A
+CRL
+PHS
+Area 1
+Carillion Tower
+Laggoon
+Fonacier Hall
+SURP
+NCPAG
+CHR
+Track Oval
+AIT
+NSRI
