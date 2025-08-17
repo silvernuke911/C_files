@@ -173,6 +173,11 @@ class Simulation:
         self.dragging = False
         self.accumulator = 0.0
         self.remove_escapees = True
+
+        self.right_dragging = False
+        self.right_drag_start = pygame.math.Vector2(0, 0)
+        self.camera_drag_start = pygame.math.Vector2(0, 0)
+
     
     def check_escapees(self):
         """Remove bodies exceeding escape velocity from any star"""
@@ -334,18 +339,29 @@ class Simulation:
             )
             pygame.draw.circle(screen, (0, 200, 200), mouse_pos, 2)
 
-        # Display time scale
-        font = pygame.font.SysFont("Arial", 20)
-        time_text = font.render(f"Time Scale: {self.time_scale / 60}x", True, (255, 255, 255))
-        screen.blit(time_text, (10, 10))
         
+        display_font = pygame.font.SysFont("Consolas", 15)
+        # Display time scale
+        time_text = display_font.render(f"Time Scale: {self.time_scale / 60}x", True, (255, 255, 255))
+        screen.blit(time_text, (10, 10))
+        # Display time scale
+        zoom_text = display_font.render(f"Zoom Scale: {self.zoom:.3f}x", True, (255, 255, 255))
+        screen.blit(zoom_text, (10, 30))
         # Display escapees mode status
-        esc_text = font.render(
+        esc_text = display_font.render(
             f"Remove Escapees: {'ON' if self.remove_escapees else 'OFF'}", 
             True, 
             (0, 255, 0) if self.remove_escapees else (255, 0, 0)
         )
-        screen.blit(esc_text, (10, 40))
+        screen.blit(esc_text, (10, 50))
+        # Display mouse world and screen position
+        mouse_pos = pygame.mouse.get_pos()
+        world_pos = (pygame.math.Vector2(mouse_pos) - self.screen_center) / self.zoom + self.camera_center
+        mouse_pos_screen = display_font.render(f"Screen Pos : {mouse_pos}", True, (255, 255, 255))
+        mouse_pos_world  = display_font.render(f"World  Pos : {world_pos}", True, (255, 255, 255))
+        screen.blit(mouse_pos_screen, (10, SCREEN_HEIGHT-20))
+        screen.blit(mouse_pos_world, (10, SCREEN_HEIGHT-40))
+        
     def handle_events(self) -> bool:
         """Handle pygame events. Returns False if simulation should quit."""
         mouse_pos = pygame.mouse.get_pos()
@@ -355,52 +371,89 @@ class Simulation:
             if event.type == pygame.QUIT:
                 return False
 
+            # Handle mouse events
+            if event.type in (pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEMOTION):
+                self.handle_mouse_events(event)
+
+            # Handle keyboard events
             if event.type == pygame.KEYDOWN:
                 self.handle_keydown(event, world_pos)
             elif event.type == pygame.KEYUP and event.key == pygame.K_f and self.current_particle and self.dragging:
                 self.handle_drag_release(mouse_pos)
 
         return True
+    
+    def handle_mouse_events(self, event: pygame.event.Event) -> None:
+        """Handle all mouse-related events."""
+        mouse_pos = pygame.mouse.get_pos()
+        world_pos = (pygame.math.Vector2(mouse_pos) - self.screen_center) / self.zoom + self.camera_center
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 3:  # Right mouse button
+                self.right_dragging = True
+                self.right_drag_start = pygame.math.Vector2(mouse_pos)
+                self.camera_drag_start = self.camera_center.copy()
+            elif event.button == 4:  # Scroll up - zoom in
+                self.zoom *= 1.1
+            elif event.button == 5:  # Scroll down - zoom out
+                self.zoom /= 1.1
+            # elif event.button == 1:  # Left click - selection (if you want to add it later)
+            #     pass
+
+        elif event.type == pygame.MOUSEBUTTONUP:
+            if event.button == 3:  # Right mouse button
+                self.right_dragging = False
+
+        elif event.type == pygame.MOUSEMOTION:
+            if self.right_dragging:
+                mouse_delta = (pygame.math.Vector2(mouse_pos) - self.right_drag_start) / self.zoom
+                self.camera_center = self.camera_drag_start - mouse_delta
 
     def handle_keydown(self, event: pygame.event.Event, world_pos: pygame.math.Vector2) -> None:
-        """Handle keyboard input."""
-        if event.key == pygame.K_e:  # Press 'E' to toggle
-            self.remove_escapees = not self.remove_escapees
-        if event.key == pygame.K_BACKSPACE:
-            self.clear_all()
-        elif event.key == pygame.K_g:
-            self.show_grid = not self.show_grid
-        elif event.key == pygame.K_p:
-            self.clear_planets()
-        elif event.key == pygame.K_s:
-            self.add_star(world_pos.x, world_pos.y, False)
-        elif event.key == pygame.K_t:
-            self.trajectory_plot = not self.trajectory_plot
-        elif event.key == pygame.K_EQUALS:  # "+" key
-            self.zoom *= 1.1
-        elif event.key == pygame.K_MINUS:  # "-" key
-            self.zoom /= 1.1
-        elif event.key == pygame.K_r:
-            self.reset_trajectories()
-        elif event.key == pygame.K_b:
-            self.camera_mode = "barycenter"
-            self.reset_trajectories()
-        elif event.key == pygame.K_m:
-            self.camera_mode = "star"
-            self.reset_trajectories()
-        elif event.key == pygame.K_n:
-            self.camera_mode = "neutral"
-            self.reset_trajectories()
-        elif event.key == pygame.K_COMMA:
-            self.time_scale /= 2
-        elif event.key == pygame.K_PERIOD:
-            self.time_scale *= 2
-        elif event.key == pygame.K_f:
-            self.handle_drag_start(world_pos)
-        elif event.key == pygame.K_c:
-            self.create_orbiting_planet(world_pos)
-        elif event.key in (pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN):
-            self.handle_camera_movement(event.key)
+        """Handle keyboard input using match-case."""
+        match event.key:
+            case pygame.K_e:  # Toggle escapee removal
+                self.remove_escapees = not self.remove_escapees
+            case pygame.K_BACKSPACE:  # Clear all objects
+                self.clear_all()
+            case pygame.K_g:  # Toggle grid
+                self.show_grid = not self.show_grid
+            case pygame.K_p:  # Clear planets
+                self.clear_planets()
+            case pygame.K_s:  # Add star
+                self.add_star(world_pos.x, world_pos.y, False)
+            case pygame.K_t:  # Toggle trajectory plot
+                self.trajectory_plot = not self.trajectory_plot
+            case pygame.K_EQUALS:  # Zoom in
+                self.zoom *= 1.1
+            case pygame.K_MINUS:  # Zoom out
+                self.zoom /= 1.1
+            case pygame.K_r:  # Reset trajectories
+                self.reset_trajectories()
+            case pygame.K_b:  # Barycenter camera mode
+                self.camera_mode = "barycenter"
+                self.reset_trajectories()
+            case pygame.K_m:  # Star camera mode
+                self.camera_mode = "star"
+                self.reset_trajectories()
+            case pygame.K_n:  # Neutral camera mode
+                self.camera_mode = "neutral"
+                self.reset_trajectories()
+            case pygame.K_COMMA:  # Decrease time scale
+                self.time_scale /= 2
+            case pygame.K_PERIOD:  # Increase time scale
+                self.time_scale *= 2
+            case pygame.K_0:  # Reset view
+                self.zoom = 1
+                self.camera_center = pygame.math.Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+            case pygame.K_f:  # Start drag
+                self.handle_drag_start(world_pos)
+            case pygame.K_c:  # Create orbiting planet
+                self.create_orbiting_planet(world_pos)
+            case pygame.K_LEFT | pygame.K_RIGHT | pygame.K_UP | pygame.K_DOWN:  # Camera movement
+                self.handle_camera_movement(event.key)
+            case _:  # Default case (no action)
+                pass
 
     def handle_camera_movement(self, key: int) -> None:
         """Handle camera movement with arrow keys."""
@@ -497,3 +550,9 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+## F2 ADD INSTRUCTION
+## F3 ADD CREATION MENUE 
+## BLACK HOLE CALCULATIONS
+## COLLISSION
+## ABSORPTION

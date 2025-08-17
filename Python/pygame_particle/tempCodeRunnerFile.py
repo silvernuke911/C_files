@@ -1,1 +1,1 @@
-2
+self.setup_uranium_square()

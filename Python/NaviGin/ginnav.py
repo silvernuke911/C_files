@@ -275,6 +275,9 @@ class Game:
             self.flip()
 
     def start_cutscene(self):
+        ## We try to put a scene here where there are two sprite wawlking and that there is not 
+        ## a single thing an yof us could do, continue tomorrow.
+
         pass 
 
     def level1_main(self):

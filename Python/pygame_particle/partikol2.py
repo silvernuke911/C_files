@@ -1155,3 +1155,20 @@ if __name__ == "__main__":
     ## SCREEN RECORD?
     ## DATA RECORD?
     ## DELTA TIME APPLICATION?
+    ## ELECTRON? ELECTRICITY? # forces?
+    ## OBJ BLUEPRINTING ## FOR A6M0 BLUEPRINT
+    ## PENDULUM? 
+    # #PHASE SPACE
+    ## SPRINGS? 
+    ## GRAVITY SIM
+        ## FORCE GRAPH? 
+    ## VERLET INTEGRATION
+    ## KSP SHIT 
+        ## LUCKY 13 ? 
+        ## FINISH THE FUCKING MANEUVER LIBRARY
+        ## LM AND SATURN V 
+        ## WELL, YEAH
+## BUILD COMMAND
+##  pyinstaller --onefile --noconsole --icon=C:\Users\verci\Documents\code\c_files\Python\pygame_particle\partikol2.0.ico C:\Users\verci\Documents\code\c_files\Python\pygame_particle\partikol2.py
+
+

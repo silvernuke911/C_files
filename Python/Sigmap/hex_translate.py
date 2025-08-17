@@ -8,7 +8,7 @@ while run :
     result = input("> ").strip()
     if result == "QUIT":
         run = False
-    result = re.split(r'[ .\s]+', result)
+    result = re.split(r'[ ,.\s]+', result)
 
     if len(result) != 3:
         print("Error: Must provide exactly 3 values.")
